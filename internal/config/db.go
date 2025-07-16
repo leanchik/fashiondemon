@@ -2,7 +2,6 @@ package config
 
 import (
 	"fashiondemon/internal/order"
-	"fashiondemon/internal/product"
 	"fmt"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -29,8 +28,6 @@ func InitDB() {
 	DB = db
 
 	err = db.AutoMigrate(
-		&product.Category{},
-		&product.Product{},
 		&order.Order{},
 		&order.OrderItem{},
 	)
