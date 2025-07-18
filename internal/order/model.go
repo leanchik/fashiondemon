@@ -1,6 +1,9 @@
 package order
 
-import "time"
+import (
+	"gorm.io/gorm"
+	"time"
+)
 
 type Order struct {
 	ID         uint `gorm:"primaryKey"`
@@ -12,9 +15,9 @@ type Order struct {
 }
 
 type OrderItem struct {
-	ID        uint `gorm:"primaryKey"`
+	gorm.Model
 	OrderID   uint
 	ProductID uint
-	Quantity  uint
-	UnitPrice float64
+	Quantity  int
+	Price     float64
 }

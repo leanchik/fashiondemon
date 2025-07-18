@@ -6,27 +6,30 @@ import (
 	"fashiondemon/internal/product"
 	"fashiondemon/internal/user"
 	"net/http"
-
-	"gorm.io/gorm"
 )
 
 func main() {
 	config.InitDB()
-	runMigrations(config.DB)
 
+	// основные миграции (без order)
+	runMigrations()
+
+	// миграция заказов (внутри order пакета)
+	order.Migrate()
+
+	// роуты
 	mux := http.NewServeMux()
 	user.RegisterRoutes(mux)
 	product.RegisterRoutes(mux)
+	order.RegisterRoutes(mux)
 
 	http.ListenAndServe(":8080", mux)
 }
 
-func runMigrations(db *gorm.DB) {
-	db.AutoMigrate(
+func runMigrations() {
+	config.DB.AutoMigrate(
 		&product.Category{},
 		&product.Product{},
 		&user.User{},
-		&order.Order{},
-		&order.OrderItem{},
 	)
 }

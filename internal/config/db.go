@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fashiondemon/internal/order"
 	"fmt"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
@@ -27,10 +26,10 @@ func InitDB() {
 
 	DB = db
 
-	err = db.AutoMigrate(
-		&order.Order{},
-		&order.OrderItem{},
-	)
+	// err = db.AutoMigrate(
+	//	&order.Order{},
+	//	&order.OrderItem{},
+	// )
 	if err != nil {
 		log.Fatal("Ошибка миграции", err)
 	}
