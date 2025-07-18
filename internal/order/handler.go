@@ -10,8 +10,8 @@ import (
 
 type OrderInput struct {
 	Item []struct {
-		ProductID string `json:"product_id"`
-		Quantity  int    `json:"quantity"`
+		ProductID uint `json:"product_id"`
+		Quantity  int  `json:"quantity"`
 	} `json:"items"`
 }
 
