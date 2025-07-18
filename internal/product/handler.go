@@ -46,3 +46,15 @@ func CreateProductHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(product)
 }
+
+func GetAllProducts(w http.ResponseWriter, r *http.Request) {
+	var products []Product
+
+	if result := config.DB.Find(&products); result.Error != nil {
+		http.Error(w, "Ошибка при получении товаров", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(products)
+}

@@ -8,4 +8,6 @@ import (
 func RegisterRoutes(mux *http.ServeMux) {
 	adminOnly := http.HandlerFunc(CreateProductHandler)
 	mux.Handle("/admin/product", auth.JWTMiddleware(adminOnly))
+
+	mux.HandleFunc("/products", GetAllProducts)
 }
