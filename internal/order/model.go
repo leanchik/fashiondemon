@@ -11,7 +11,7 @@ type Order struct {
 	Total      float64
 	Status     string `gorm:"default:'new'"`
 	CreateAt   time.Time
-	OrderItems []OrderItem
+	OrderItems []OrderItem `gorm:"foreignKey:OrderID" json:"items"`
 }
 
 type OrderItem struct {

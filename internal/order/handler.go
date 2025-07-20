@@ -55,3 +55,16 @@ func CreateOrderHandler(w http.ResponseWriter, r *http.Request) {
 		"message": "Заказ успешно оформлен",
 	})
 }
+
+func GetOrdersHandler(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(auth.UserIDKey).(uint)
+
+	var orders []Order
+	if err := config.DB.Preload("Items").Where("user_id = ?", userID).Find(&orders).Error; err != nil {
+		http.Error(w, "Ошибка при получении заказов", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(orders)
+}

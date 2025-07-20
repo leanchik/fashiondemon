@@ -11,13 +11,10 @@ import (
 func main() {
 	config.InitDB()
 
-	// основные миграции (без order)
 	runMigrations()
 
-	// миграция заказов (внутри order пакета)
 	order.Migrate()
 
-	// роуты
 	mux := http.NewServeMux()
 	user.RegisterRoutes(mux)
 	product.RegisterRoutes(mux)
