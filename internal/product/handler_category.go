@@ -33,3 +33,15 @@ func CreateCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(category)
 }
+
+func GetAllCategoriesHandler(w http.ResponseWriter, r *http.Request) {
+	var categories []Category
+
+	if err := config.DB.Find(&categories).Error; err != nil {
+		http.Error(w, "Ошибка при получении категорий", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(categories)
+}
