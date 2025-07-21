@@ -84,3 +84,20 @@ func GetProductByIDHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(product)
 }
+
+func GetProductByCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	idStr := strings.TrimPrefix(r.URL.Path, "/products/category/")
+	categoryID, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Невалидный ID категории", http.StatusBadRequest)
+		return
+	}
+
+	var products []Product
+	if err := config.DB.Where("category_id = ?", categoryID).Find(&products).Error; err != nil {
+		http.Error(w, "Ошибка при получении товаров", http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(products)
+}
