@@ -39,7 +39,7 @@ API будет доступен на `http://localhost:8080`.
 │   ├── product/        # Каталог товаров и категории
 │   └── order/          # Создание и просмотр заказов
 ├── pkg/
-│   └── auth/           # Авторизация
+│   └── auth/           # Реализация JWT & Middleware
 ├── .env                # Переменные окружения (DB, JWT)
 ├── Dockerfile          # Образ для Go-приложения
 ├── docker-compose.yml  # Все сервисы: app + DB + pgAdmin
