@@ -101,3 +101,25 @@ func GetProductByCategoryHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(products)
 }
+
+func DeleteProductHandler(w http.ResponseWriter, r *http.Request) {
+	role := r.Context().Value(auth.RoleKey).(string)
+	if role != "admin" {
+		http.Error(w, "Доступ запрещен!", http.StatusForbidden)
+	}
+
+	idStr := strings.TrimPrefix(r.URL.Path, "admin/product/")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Невалидный JSON", http.StatusBadRequest)
+		return
+	}
+
+	if err := config.DB.Delete(&Product{}, id).Error; err != nil {
+		http.Error(w, "Ошибка при удалении товара", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Товар удален!"))
+}
