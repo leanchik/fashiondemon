@@ -6,6 +6,8 @@ import (
 	"fashiondemon/internal/product"
 	"fashiondemon/pkg/auth"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 type OrderInput struct {
@@ -67,4 +69,23 @@ func GetOrdersHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(orders)
+}
+
+func GetOrderByIDHandler(w http.ResponseWriter, r *http.Request) {
+	userID := r.Context().Value(auth.UserIDKey).(uint)
+
+	idStr := strings.TrimPrefix(r.URL.Path, "/orders/")
+	orderID, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Неверный формат ID заказа", http.StatusBadRequest)
+		return
+	}
+
+	var order Order
+	if err := config.DB.Preload("Items").Where("id = ? AND user_id = ?", orderID, userID).First(&order).Error; err != nil {
+		http.Error(w, "Заказ не найден", http.StatusNotFound)
+		return
+	}
+
+	json.NewEncoder(w).Encode(order)
 }
