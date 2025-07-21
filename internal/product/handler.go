@@ -5,6 +5,8 @@ import (
 	"fashiondemon/internal/config"
 	"fashiondemon/pkg/auth"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 type ProductInput struct {
@@ -64,4 +66,21 @@ func GetAllProductsHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(products)
+}
+
+func GetProductByIDHandler(w http.ResponseWriter, r *http.Request) {
+	idStr := strings.TrimPrefix(r.URL.Path, "/products/")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "Невалидный ID", http.StatusBadRequest)
+		return
+	}
+
+	var product Product
+	if err := config.DB.First(&product, id).Error; err != nil {
+		http.Error(w, "Товар не найден", http.StatusNotFound)
+		return
+	}
+
+	json.NewEncoder(w).Encode(product)
 }
