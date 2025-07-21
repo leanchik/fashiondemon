@@ -11,5 +11,5 @@ func RegisterRoutes(mux *http.ServeMux) {
 	mux.Handle("/admin/category/", auth.JWTMiddleware(http.HandlerFunc(CreateCategoryHandler)))
 	mux.Handle("/categories", http.HandlerFunc(GetAllCategoriesHandler))
 
-	mux.HandleFunc("/products", GetAllProducts)
+	mux.HandleFunc("/products", GetAllProductsHandler)
 }

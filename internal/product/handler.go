@@ -47,10 +47,17 @@ func CreateProductHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(product)
 }
 
-func GetAllProducts(w http.ResponseWriter, r *http.Request) {
+func GetAllProductsHandler(w http.ResponseWriter, r *http.Request) {
 	var products []Product
 
-	if result := config.DB.Find(&products); result.Error != nil {
+	categoryID := r.URL.Query().Get("category")
+	query := config.DB
+
+	if categoryID != "" {
+		query = query.Where("category_id = ?", categoryID)
+	}
+
+	if err := query.Find(&products).Error; err != nil {
 		http.Error(w, "Ошибка при получении товаров", http.StatusInternalServerError)
 		return
 	}
