@@ -12,4 +12,5 @@ func RegisterRoutes(mux *http.ServeMux) {
 	mux.Handle("/categories", http.HandlerFunc(GetAllCategoriesHandler))
 	mux.HandleFunc("/products", GetAllProductsHandler)
 	mux.HandleFunc("/products/", GetProductByIDHandler)
+	mux.HandleFunc("/products/category", GetProductByCategoryHandler)
 }
