@@ -49,6 +49,14 @@ func CreateProductHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(product)
 }
 
+// GetAllProductsHandler godoc
+// @Summary Получить список всех продуктов
+// @Description Возвращает все товары из базы данных
+// @Tags Продукты
+// @Produce json
+// @Success 200 {array} product.Product
+// @Router /products [get]
+
 func GetAllProductsHandler(w http.ResponseWriter, r *http.Request) {
 	var products []Product
 
